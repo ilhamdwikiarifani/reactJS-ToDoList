@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +13,7 @@ import Footer from "./Footer";
 const Home = () => {
   const { mutate } = useSWRConfig();
   const navigate = useNavigate();
+  const [name, setName] = useState("");
 
   const myInstance = axios.create({
     baseURL: import.meta.env.VITE_REACT_API,
@@ -45,25 +47,59 @@ const Home = () => {
     return navigate(`/edit/${id}`);
   };
 
+  // const addData = async (e) => {
+  //   e.preventDefault();
+
+  //   const data = {
+  //     name: name,
+  //   };
+
+  //   try {
+  //     if (name === "") {
+  //       console.log("kosong");
+  //       setName("");
+  //     } else {
+  //       await myInstance.post("/works", data);
+  //       mutate("works");
+  //       console.log("data ditambahkan");
+  //     }
+  //   } catch (error) {
+  //     console.log("error");
+  //   }
+  // };
+
+  const AddData = async (e) => {
+    e.preventDefault();
+    await myInstance
+      .post(`/works`, { name: name })
+      .catch((err) => console.log(`err`, err));
+    mutate("works");
+  };
+
   return (
     <div className="w-full h-screen bg-zinc-950 flex justify-center items-center">
       <div className="w-[600px] h-[500px] px-3 md:px-0  mx-auto flex justify-center items-center text-white">
         <div className="w-full">
-          <div className="block">
-            <div className="flex justify-start items-center mb-7">
-              <div>
-                <button
-                  onClick={() => navigate("/add")}
-                  className="px-[20px] py-[14px] bg-white text-xl text-black rounded-full me-5 hover:translate-x-1 transition-all duration-300 hover:bg-zinc-900 hover:text-white hover:border hover:border-zinc-500"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </div>
+          <div className="flex mt-20 md:mt-0 md:my-5">
+            <form onSubmit={AddData} className="block w-full">
               <div className="leading-none">
                 <p className="font-bold text-2xl">Nekoserve.</p>
                 <p>@nekoserve</p>
               </div>
-            </div>
+              <input
+                type="text"
+                className="bg-zinc-900  border border-zinc-700 w-full rounded-md h-[50px]  my-5 px-2 "
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="bg-zinc-100 text-black font-bold p-4 w-full rounded-lg hover:translate-y-1 transition-all duration-300"
+              >
+                Add Data
+              </button>
+            </form>
+          </div>
+          <div className="block">
             <div className="text-white">
               {data.map((datas) => {
                 return (
