@@ -74,6 +74,7 @@ const Home = () => {
       .post(`/works`, { name: name })
       .catch((err) => console.log(`err`, err));
     mutate("works");
+    e.target.reset();
   };
 
   return (
