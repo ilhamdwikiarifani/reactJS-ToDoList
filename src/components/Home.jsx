@@ -47,34 +47,21 @@ const Home = () => {
     return navigate(`/edit/${id}`);
   };
 
-  // const addData = async (e) => {
-  //   e.preventDefault();
-
-  //   const data = {
-  //     name: name,
-  //   };
-
-  //   try {
-  //     if (name === "") {
-  //       console.log("kosong");
-  //       setName("");
-  //     } else {
-  //       await myInstance.post("/works", data);
-  //       mutate("works");
-  //       console.log("data ditambahkan");
-  //     }
-  //   } catch (error) {
-  //     console.log("error");
-  //   }
-  // };
-
   const AddData = async (e) => {
     e.preventDefault();
-    await myInstance
-      .post(`/works`, { name: name })
-      .catch((err) => console.log(`err`, err));
-    mutate("works");
-    e.target.reset();
+
+    try {
+      if (name === "") {
+        alert("nama tidak boleh kosong");
+        setName("");
+      } else {
+        await myInstance.post("/works", { name: name });
+        mutate("works");
+        setName("");
+      }
+    } catch (error) {
+      console.log("error");
+    }
   };
 
   return (
